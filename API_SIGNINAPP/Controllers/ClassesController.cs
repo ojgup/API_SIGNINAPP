@@ -5,26 +5,54 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using System.Data.SqlClient;
 using API_SIGNINAPP.Models;
+using System.Data;
 
 namespace API_SIGNINAPP.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ClassesController : ControllerBase
-    {
-
-        //test
+    public class ClassesController : ControllerBase {
 
         // GET api/Classes
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public ActionResult<IEnumerable<Classes>> Get()
         {
 
             // sign-in-app.database.windows.net
             // username : milan
             // password : Swinburne1
+            SqlConnection conn = null;
+            try
+            {
+                conn = DB.GetConnection();
+                conn.Open();
+                SqlCommand command = new SqlCommand("select * from class", conn);
+                SqlDataReader dataReader = command.ExecuteReader();
+                List<Classes> listOfClasses = new List<Classes>();
+                string output = "";
 
-            return new string[] { "value1", "value2" };
+                Classes addClass;
+                while (dataReader.Read())
+                {
+                    output += dataReader["ClassID"].ToString();
+                    addClass = new Classes(int.Parse(dataReader["ClassID"].ToString()), dataReader["Day"].ToString(), dataReader["startTime"].ToString(),
+                    dataReader["endTime"].ToString(), dataReader["name"].ToString(), dataReader["label"].ToString());
+
+                    listOfClasses.Add(addClass);
+                }
+                return listOfClasses;
+            }
+            catch (Exception ex) {
+                Console.WriteLine(ex.ToString());
+                return null;
+            } finally
+            {
+                if(conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Close();
+                }
+            }
+
         }
 
         // GET api/values/5
