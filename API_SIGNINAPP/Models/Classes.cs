@@ -24,4 +24,5 @@ namespace API_SIGNINAPP.Models
             this.Label = label;
         }
     }
+
 }
