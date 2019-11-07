@@ -13,6 +13,8 @@ namespace API_SIGNINAPP.Controllers
     public class ClassesController : ControllerBase
     {
 
+        //test
+
         // GET api/Classes
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
