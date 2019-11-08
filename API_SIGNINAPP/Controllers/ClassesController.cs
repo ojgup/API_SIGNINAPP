@@ -30,14 +30,12 @@ namespace API_SIGNINAPP.Controllers
                 SqlDataReader dataReader = command.ExecuteReader();
                 List<Classes> listOfClasses = new List<Classes>();
                 string output = "";
-
                 Classes addClass;
                 while (dataReader.Read())
                 {
                     output += dataReader["ClassID"].ToString();
                     addClass = new Classes(int.Parse(dataReader["ClassID"].ToString()), dataReader["Day"].ToString(), dataReader["startTime"].ToString(),
                     dataReader["endTime"].ToString(), dataReader["name"].ToString(), dataReader["label"].ToString());
-
                     listOfClasses.Add(addClass);
                 }
                 return listOfClasses;
@@ -45,8 +43,7 @@ namespace API_SIGNINAPP.Controllers
             catch (Exception ex) {
                 Console.WriteLine(ex.ToString());
                 return null;
-            } finally
-            {
+            } finally {
                 if(conn != null && conn.State == ConnectionState.Closed)
                 {
                     conn.Close();
@@ -59,6 +56,9 @@ namespace API_SIGNINAPP.Controllers
         [HttpGet("{id}")]
         public ActionResult<string> Get(int id)
         {
+            SqlConnection conn = null;
+
+
             return "value";
         }
 
